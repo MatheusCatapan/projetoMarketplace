@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    
+
     public function up(): void
     {
         Schema::create('coupons_orders', function (Blueprint $table) {
@@ -17,9 +17,9 @@ return new class extends Migration
             $table->decimal('discount', 5, 2);
         });
     }
-    
+
     public function down(): void
     {
-        
+
     }
 };
