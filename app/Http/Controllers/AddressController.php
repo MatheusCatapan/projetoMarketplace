@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\Address;
 
 class AddressController extends Controller
 {
@@ -12,7 +12,7 @@ class AddressController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         return $request->user()->addresses;
     }
@@ -35,7 +35,7 @@ class AddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Address $address)
     {
         $this->authorize('view', $address);
         return $address;
@@ -44,20 +44,20 @@ class AddressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Address $address)
     {
         $this->authorize('update', $address);
-        $address->update($request->only(['strees', 'city', 'state', 'zip']));
+        $address->update($request->only(['street', 'city', 'state', 'zip']));
         return $address;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Address $address)
     {
         $this->authorize('delete', $address);
-        $address->delete;
+        $address->delete();
         return response()->noContent();
     }
 }

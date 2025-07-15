@@ -20,7 +20,7 @@ class AdminController extends Controller
         $fields['role'] = 'CLIENT';
     };
 
-    $user = User::create($user);
+    $user = User::create($fields);
     return $user;
 
 }
