@@ -13,9 +13,10 @@ class EnderecosTest extends TestCase
 
     public function test_controle_de_address_armezenamento()
     {
-        User::factory()->create();
+        $user = User::factory()->create();
+        $this->actingAs($user, 'sanctum');
 
-        $response = $this->postJson('/api/enderecos', [
+        $response = $this->postJson('/api/addresses', [
             'street' => 'Rua Exemplo',
             'city' => 'Cidade Exemplo',
             'state' => 'Estado Exemplo',

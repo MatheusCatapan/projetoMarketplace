@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    
+
     public function up(): void
     {
         Schema::create('users_addresses', function (Blueprint $table) {
@@ -17,11 +17,12 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('country')->nullable();
+            $table->timestamps();
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
 }
-    
+
     public function down(): void
     {
         Schema::dropIfExists('users_addresses');
