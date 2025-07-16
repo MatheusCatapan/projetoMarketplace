@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductsController;
 
 //Login, logout
 Route::post('/register', [AuthController::class, 'register']);
@@ -21,6 +22,7 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('posts', PostController::class);
 Route::apiResource('categories', CategoriesController::class);
 Route::apiResource('addresses', AddressController::class);
+Route::apiResource('products', ProductsController::class);
 
 //Rotas de admin
 Route::middleware('auth:sanctum', 'admin')->group(function(){

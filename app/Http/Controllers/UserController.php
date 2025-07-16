@@ -24,6 +24,11 @@ class UserController extends Controller
         return $user;
     }
 
+    public function show(Request $request)
+    {
+        return $request->user();
+    }
+
     public function destroy(Request $request)
     {
         $user = $request->user();
