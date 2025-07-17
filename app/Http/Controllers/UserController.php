@@ -11,7 +11,7 @@ class UserController extends Controller
         $user = $request->user();
 
         $data = $request->validate([
-            'name' => 'sometimes|max:255',
+            'name' => 'sometimes|max:255,' . $user->id,
             'email' => 'sometimes|email|unique',
             'password' => 'sometimes|confirmed'
         ]);
@@ -29,12 +29,12 @@ class UserController extends Controller
         return $request->user();
     }
 
-    public function destroy(Request $request)
+    public function delete(Request $request)
     {
         $user = $request->user();
         $user->delete();
 
-        return "Seu usuário foi deletado";
+        return response()->json(["Seu usuário foi deletado"], 200);
     }
 
 }

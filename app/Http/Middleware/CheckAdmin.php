@@ -11,13 +11,16 @@ class CheckAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request)
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->role !== 'ADMIN') {
+        if (!$request->user() || $request->user()->role !== 'ADMIN') {
             return response()->json(['error' => 'Acesso negado'], 403);
         }
+
         return $next($request);
     }
 }

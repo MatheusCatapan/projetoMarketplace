@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -11,7 +10,7 @@ class EnderecosTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_controle_de_address_armezenamento()
+    public function test_controle_de_enderecos()
     {
         $user = User::factory()->create();
         $this->actingAs($user, 'sanctum');
@@ -22,15 +21,13 @@ class EnderecosTest extends TestCase
             'state' => 'Estado Exemplo',
             'zip' => '12345-678'
         ]);
-        $response->assertOk()
+        $response->assertStatus(201)
             ->assertJsonStructure([
                 'street',
                 'city',
                 'state',
                 'zip',
-            ])
-            ->json();
-        return $response;
+            ]);
     }
 
 

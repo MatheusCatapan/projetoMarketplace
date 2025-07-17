@@ -3,17 +3,29 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
+
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function authenticateUser()
+    {
+        $user = User::factory()->create([
+            'role' => 'ADMIN',
+        ]);
+
+        $token = $user->createToken('TestToken')->plainTextToken;
+        return ['Authorization' => 'Bearer ' . $token, 'user' => $user];
+
+    }
+
     public function test_retorno_de_usuario_logado()
     {
-        $user = User::factory()->create();
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
 
         $response = $this->actingAs($user)->getJson('/api/user');
 
@@ -25,29 +37,14 @@ class UserTest extends TestCase
             ]);
     }
 
-    // public function test_atualizacao_de_usuario()
-    // {
-    //     $user = User::factory()->create();
+    public function test_deletar_usuario_logado()
+    {
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
 
-    //     $data = [
-    //         'name' => 'teste',
-    //         'email' => 'teste@email.com',
-    //         'password' => '123456',
-    //     ];
+        $response = $this->actingAs($user)->deleteJson(route('user.delete'));
+        $response->assertOk()
+            ->assertSeeText('Seu usuário foi deletado');
+    }
 
-    //     if (isset($data['password'])) {
-    //         $data['password'] = bcrypt($data['password']);
-    //     }
-
-    // public function test_excluir_usuario()
-    // {
-    //     $user = User::factory()->create();
-
-    //     $response = $this->actingAs($user)->deleteJson('/api/user');
-
-    //     $response->assertOk();
-    //     $this->assertDatabaseMissing('users', [
-    //         'id' => $user->id,
-    //     ]);
-    // }
 }

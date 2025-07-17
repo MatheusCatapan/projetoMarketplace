@@ -24,10 +24,17 @@ Route::apiResource('categories', CategoriesController::class);
 Route::apiResource('addresses', AddressController::class);
 Route::apiResource('products', ProductsController::class);
 
-//Rotas de admin
+//Rotas de admin 
 Route::middleware('auth:sanctum', 'admin')->group(function(){
-    Route::put('/user', [UserController::class, 'update']);
-    Route::delete('/user', [UserController::class, 'delete']);
+    Route::put('/user', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/user', [UserController::class, 'delete'])->name('user.delete');
+});
+
+//Rotas dos produtos - Moderadores
+Route::middleware('auth:sanctum', 'moderator')->group(function(){
+    Route::post('/products', [ProductsController::class, 'store']);
+    Route::put('/products/{product}', [ProductsController::class, 'update']);
+    Route::delete('/products/{product}', [ProductsController::class, 'destroy']);
 });
 
 
