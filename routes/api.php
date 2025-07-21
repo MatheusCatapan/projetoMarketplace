@@ -22,20 +22,19 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('posts', PostController::class);
 Route::apiResource('categories', CategoriesController::class);
 Route::apiResource('addresses', AddressController::class);
-Route::apiResource('products', ProductsController::class);
+Route::apiResource('products', ProductsController::class)->only(['index', 'show']);
 
-//Rotas de admin 
-Route::middleware('auth:sanctum', 'admin')->group(function(){
-    Route::put('/user', [UserController::class, 'update'])->name('user.update');
-    Route::delete('/user', [UserController::class, 'delete'])->name('user.delete');
-});
+//Rotas de admin
+Route::middleware('auth:sanctum')->put('/user', [UserController::class, 'update']);
+Route::middleware('auth:sanctum')->delete('/user', [UserController::class, 'delete']);
+
 
 //Rotas dos produtos - Moderadores
-Route::middleware('auth:sanctum', 'moderator')->group(function(){
-    Route::post('/products', [ProductsController::class, 'store']);
-    Route::put('/products/{product}', [ProductsController::class, 'update']);
-    Route::delete('/products/{product}', [ProductsController::class, 'destroy']);
-});
+Route::middleware('auth:sanctum', 'moderador')->post('/products', [ProductsController::class, 'store']);
+Route::middleware('auth:sanctum', 'moderador')->put('/products/{product}', [ProductsController::class, 'update']);
+Route::middleware('auth:sanctum', 'moderador')->delete('/products/{product}', [ProductsController::class, 'destroy']);
+
+
 
 
 

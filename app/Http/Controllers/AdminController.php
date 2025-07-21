@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AdminController extends Controller
 {
     public function store (Request $request)
     {
-
     $fields = $request->validate([
         'name' => 'required|max:255',
         'email' => 'required|email|unique:users',
@@ -22,6 +22,5 @@ class AdminController extends Controller
 
     $user = User::create($fields);
     return $user;
-
 }
 }

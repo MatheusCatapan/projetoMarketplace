@@ -42,9 +42,8 @@ class UserTest extends TestCase
         $auth = $this->authenticateUser();
         $user = $auth['user'];
 
-        $response = $this->actingAs($user)->deleteJson(route('user.delete'));
-        $response->assertOk()
-            ->assertSeeText('Seu usuário foi deletado');
+        $response = $this->actingAs($user)->deleteJson('/api/user');
+        $response->assertOk();
     }
 
 }

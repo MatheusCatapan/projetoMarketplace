@@ -34,7 +34,7 @@ class UserController extends Controller
         $user = $request->user();
         $user->delete();
 
-        return response()->json(["Seu usuário foi deletado"], 200);
+        return response()->json(["Seu usuário foi deletado"]);
     }
 
 }
