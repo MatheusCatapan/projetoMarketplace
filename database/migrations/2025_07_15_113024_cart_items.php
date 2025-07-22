@@ -8,18 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id')->unsigned();
-            $table->string('name');
-            $table->integer('stock');
+            $table->foreignId('cart_id')->constrained('users_carts')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('product')->onDelete('cascade');
+            $table->integer('quantity');
             $table->decimal('price', 10, 2);
-            $table->string('image')->nullable();
         });
 }
 
+
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('cart_items');
     }
 };

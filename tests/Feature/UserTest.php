@@ -68,16 +68,19 @@ class UserTest extends TestCase
         $auth = $this->authenticateUser();
         $user = $auth['user'];
 
-        $response = $this->actingAs($user)->postJson('/api/moderadores', [
+        $response = $this->actingAs($user)->postJson('/api/user', [
             'name' => 'Moderador Teste',
-            'email' => $user->email,
+            'email' => 'moderador@exemplo.com',
             'password' => 'senhaSegura',
             'password_confirmation' => 'senhaSegura',
+            'role' => 'MODERADOR',
         ]);
-        $response->assertOk()
-            ->assertJson([
-                'name' => 'Moderador Teste',
-                'email' => $user->email,
-            ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'name' => 'Moderador Teste',
+            'email' => 'moderador@exemplo.com',
+            'role' => 'MODERADOR',
+        ]);
     }
 }

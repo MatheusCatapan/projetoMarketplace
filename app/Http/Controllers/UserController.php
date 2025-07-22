@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -37,4 +38,22 @@ class UserController extends Controller
         return response()->json(["Seu usuário foi deletado"]);
     }
 
+    public function store(Request $request)
+    {
+        $fields = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+            'role' => 'in:CLIENT,MODERADOR,ADMIN'
+        ]);
+
+        if (!isset($fields['role'])) {
+            $fields['role'] = 'CLIENT';
+        }
+
+        $fields['password'] = bcrypt($fields['password']);
+        $user = User::create($fields);
+
+        return response()->json($user, 201);
+    }
 }

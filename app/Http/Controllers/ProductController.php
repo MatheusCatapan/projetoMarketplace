@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Products;
+use App\Models\Product;
 
-class ProductsController extends Controller
+class ProductController extends Controller
 {
     public function __construct()
         {
             $this->middleware(['auth:sanctum', 'moderador'])->except(['index', 'show',]);
         }
 
-    public function show(Products $product)
+    public function show(Product $product)
     {
         return $product;
     }
@@ -20,21 +20,23 @@ class ProductsController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'id' => 'integer',
             'name' => 'required|max:255',
-            'description' => 'required|max:255',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'description' => 'nullable|max:255',
+            'updated_at' => 'nullable|date',
+            'created_at' => 'nullable|date',
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $data['image'] = $request->file('image')->store('product', 'public');
         }
 
-        $product = Products::create($data);
+        $product = Product::create($data);
         return $product;
     }
 
-    public function update(Request $request, Products $product)
+    public function update(Request $request, Product $product)
     {
         $data = $request->validate([
             'name' => 'sometimes|max:255',
@@ -44,14 +46,14 @@ class ProductsController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $data['image'] = $request->file('image')->store('product', 'public');
         }
 
         $product->update($data);
         return $product;
     }
 
-    public function destroy (Products $product)
+    public function destroy (Product $product)
     {
         $product->delete();
         return response()->noContent();
