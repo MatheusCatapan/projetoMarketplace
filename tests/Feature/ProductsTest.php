@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductsTest extends TestCase
 {
@@ -24,28 +25,26 @@ class ProductsTest extends TestCase
 
     public function test_criar_produto()
     {
+        $user = $this->authenticateUser();
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['category_id' => $category->id]);
 
-        $product = Product::factory()->create();
-
-        $auth = $this->authenticateUser();
-        $user = $auth['user'];
-        $response = $this->actingAs($user)->postJson('/api/product', [
+        $response = $this->withHeaders($user)->postJson('/api/product', [
             'id' => $product->id,
-            'name' => 'Produto Teste',
-            'price' => 100.00,
-            'description' => 'Descrição do produto teste',
-            'updated_at' => now(),
-            'created_at' => now(),
-        ]);
+            'name' => $product->name,
+            'stock' => $product->stock,
+            'price' => $product->price,
+            'image' => $product->image,
+            'category_id' => $product->category_id,
 
-        $response->assertStatus(201)
-            ->assertJsonStructure([
-                'id',
-                'name',
-                'price',
-                'description',
-                'created_at',
-                'updated_at',
-            ]);
+        ]);
+        $response->assertCreated();
+        $this->assertDatabaseHas('products', [
+            'name' => $product->name,
+            'stock' => $product->stock,
+            'price' => $product->price,
+            'category_id' => $product->category_id,
+        ]);
     }
+
 }

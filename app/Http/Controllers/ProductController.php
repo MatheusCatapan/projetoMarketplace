@@ -22,10 +22,12 @@ class ProductController extends Controller
         $data = $request->validate([
             'id' => 'integer',
             'name' => 'required|max:255',
+            'stock' => 'required|integer|min:0',
             'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|max:255',
-            'updated_at' => 'nullable|date',
-            'created_at' => 'nullable|date',
+
         ]);
 
         if ($request->hasFile('image')) {

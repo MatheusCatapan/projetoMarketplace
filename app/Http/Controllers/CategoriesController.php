@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class CategoriesController
 {
     public function __construct()
     {
-        $this->middlware('auth:sanctum')->except(['index', 'show']);
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
     public function index()
@@ -24,7 +25,7 @@ class CategoriesController
     public function store(Request $request)
     {
         $data = $request->validate(['name' => 'required']);
-        $category->update($data);
+        $category = Category::create($data);
         return $category;
     }
 
