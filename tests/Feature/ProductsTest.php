@@ -5,8 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Product;
-use App\Models\Category;
+use App\Models\Categories;
 
 class ProductsTest extends TestCase
 {
@@ -19,32 +18,34 @@ class ProductsTest extends TestCase
         ]);
 
         $token = $user->createToken('TestToken')->plainTextToken;
-        return ['Authorization' => 'Bearer ' . $token, 'user' => $user];
 
+        return ['Authorization' => 'Bearer ' . $token, 'user' => $user];
     }
 
     public function test_criar_produto()
     {
-        $user = $this->authenticateUser();
-        $category = Category::factory()->create();
-        $product = Product::factory()->create(['category_id' => $category->id]);
+        $auth = $this->authenticateUser();
+        $headers = ['Authorization' => $auth['Authorization']];
 
-        $response = $this->withHeaders($user)->postJson('/api/product', [
-            'id' => $product->id,
-            'name' => $product->name,
-            'stock' => $product->stock,
-            'price' => $product->price,
-            'image' => $product->image,
-            'category_id' => $product->category_id,
+        $category = Categories::factory()->create();
 
-        ]);
+        $productData = [
+            'name' => 'Produto Teste',
+            'stock' => 15,
+            'price' => 99.99,
+            'image' => 'https://via.placeholder.com/640x480.png',
+            'category_id' => $category->id,
+        ];
+
+        $response = $this->withHeaders($headers)->postJson('/api/product', $productData);
+
         $response->assertCreated();
+
         $this->assertDatabaseHas('products', [
-            'name' => $product->name,
-            'stock' => $product->stock,
-            'price' => $product->price,
-            'category_id' => $product->category_id,
+            'name' => 'Produto Teste',
+            'stock' => 15,
+            'price' => 99.99,
+            'category_id' => $category->id,
         ]);
     }
-
 }

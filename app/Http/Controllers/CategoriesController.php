@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Categories;
 
 class CategoriesController
 {
@@ -17,21 +17,21 @@ class CategoriesController
         return Category::all();
     }
 
-    public function show(Category $category)
+    public function show(Categories $categories)
     {
-        return $category;
+        return $categories;
     }
 
     public function store(Request $request)
     {
         $data = $request->validate(['name' => 'required']);
-        $category = Category::create($data);
-        return $category;
+        $categories = Categories::create($data);
+        return $categories;
     }
 
-    public function destroy (Category $category)
+    public function destroy (Category $categories)
     {
-        $category->delete();
+        $categories->delete();
         return response()->noContent();
     }
 }
