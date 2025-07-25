@@ -17,10 +17,8 @@ class AddressController extends Controller
         return $request->user()->addresses;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function armazenarEndereco(Request $request)
     {
         $data = $request->validate([
             'street' => 'required',
@@ -32,29 +30,20 @@ class AddressController extends Controller
         return $address;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Address $address)
+    public function mostrarEndereco(Address $address)
     {
         $this->authorize('view', $address);
         return $address;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Address $address)
+    public function atualizarEndereco(Request $request, Address $address)
     {
         $this->authorize('update', $address);
         $address->update($request->only(['street', 'city', 'state', 'zip']));
         return $address;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Address $address)
+    public function deletarEndereco(Address $address)
     {
         $this->authorize('delete', $address);
         $address->delete();

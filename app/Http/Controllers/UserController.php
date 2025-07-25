@@ -7,7 +7,7 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function update(Request $request)
+    public function atualizarUsuario(Request $request)
     {
         $user = $request->user();
 
@@ -25,12 +25,12 @@ class UserController extends Controller
         return $user;
     }
 
-    public function show(Request $request)
+    public function mostrarUsuario(Request $request)
     {
         return $request->user();
     }
 
-    public function delete(Request $request)
+    public function deletarUsuario(Request $request)
     {
         $user = $request->user();
         $user->delete();
@@ -38,7 +38,7 @@ class UserController extends Controller
         return response()->json(["Seu usuário foi deletado"]);
     }
 
-    public function store(Request $request)
+    public function cadastrarUsuario(Request $request)
     {
         $fields = $request->validate([
             'name' => 'required|max:255',
@@ -54,6 +54,10 @@ class UserController extends Controller
         $fields['password'] = bcrypt($fields['password']);
         $user = User::create($fields);
 
-        return response()->json($user, 201);
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ], 201);
     }
 }

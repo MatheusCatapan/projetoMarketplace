@@ -7,20 +7,30 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
-    public function store (Request $request)
+    public function __construct()
     {
-    $fields = $request->validate([
-        'name' => 'required|max:255',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|confirmed',
-        'role' => 'in:CLIENT, MODERADOR, ADMIN'
-    ]);
+        $this->middleware(['auth:sanctum', 'admin']);
+    }
 
-    if (!isset($fields['role'])) {
-        $fields['role'] = 'CLIENT';
-    };
+    public function criarAdmin(Request $request)
+    {
+        $fields = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+            'role' => 'in:CLIENT,MODERADOR,ADMIN'
+        ]);
 
-    $user = User::create($fields);
-    return $user;
-}
-}
+        $fields['role'] = 'ADMIN';
+        $fields['password'] = bcrypt($fields['password']);
+
+        $user = User::create($fields);
+        return response()->json($user, 201);
+    }
+
+    public function listarAdmins()
+    {
+        return User::where('role', 'ADMIN')->get();
+    }
+};
+

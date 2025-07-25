@@ -8,7 +8,13 @@ use App\Models\User;
 
 class ModeradorController extends Controller
 {
-    public function store(Request $request)
+
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'admin']);
+    }
+
+    public function criarModerador(Request $request)
     {
         $fields = $request->validate([
             'name' => 'required|max:255',
@@ -17,14 +23,15 @@ class ModeradorController extends Controller
             'role' => 'in:CLIENT,MODERADOR,ADMIN'
         ]);
 
-        if (!isset($fields['role'])) {
-            $fields['role'] = 'CLIENT';
-        }
-
         $fields['role'] = 'MODERADOR';
         $fields['password'] = Hash::make($fields['password']);
 
         $user = User::create($fields);
         return $user;
+    }
+
+    public function listarModeradores()
+    {
+        return User::where('role', 'MODERADOR')->get();
     }
 }

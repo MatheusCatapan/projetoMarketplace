@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Categories;
+use App\Models\Category;
 
 class CategoriesController
 {
@@ -12,26 +12,31 @@ class CategoriesController
         $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
-    public function index()
+    public function cadastrarCategoria(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'nullable|max:255'
+        ]);
+
+        $category = Category::create($data);
+        return response()->json($category, 201);
+    }
+
+
+    public function listarCategorias()
     {
         return Category::all();
     }
 
-    public function show(Categories $categories)
+    public function mostrarCategoria(Category $category)
     {
-        return $categories;
+        return $category;
     }
 
-    public function store(Request $request)
+    public function deletarCategoria (Category $category)
     {
-        $data = $request->validate(['name' => 'required']);
-        $categories = Categories::create($data);
-        return $categories;
-    }
-
-    public function destroy (Category $categories)
-    {
-        $categories->delete();
+        $category->delete();
         return response()->noContent();
     }
 }

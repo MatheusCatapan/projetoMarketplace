@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function registrarUsuario(Request $request)
     {
         $fields = $request->validate([
             'name' => 'required|max:255',
@@ -26,7 +26,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function login(Request $request)
+    public function loginUsuario(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users',
@@ -50,7 +50,7 @@ class AuthController extends Controller
 
     }
 
-    public function logout(Request $request)
+    public function logoutUsuario(Request $request)
     {
         $request->user()->tokens()->delete();
 

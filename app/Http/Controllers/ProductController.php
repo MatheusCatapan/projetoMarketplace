@@ -9,25 +9,23 @@ class ProductController extends Controller
 {
     public function __construct()
         {
-            $this->middleware(['auth:sanctum', 'moderador'])->except(['index', 'show',]);
+            $this->middleware(['auth:sanctum', 'moderador'])->except(['mostrarProduto']);
         }
 
-    public function show(Product $product)
+    public function mostrarProduto(Product $product)
     {
         return $product;
     }
 
-    public function store(Request $request)
+    public function cadastrarProduto (Request $request)
     {
         $data = $request->validate([
             'id' => 'integer',
+            'category_id' => 'required|integer',
             'name' => 'required|max:255',
-            'stock' => 'required|integer|min:0',
+            'stock' => 'required|integer',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'category_id' => 'required|exists:categories,id',
-            'description' => 'nullable|max:255',
-
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
@@ -35,10 +33,10 @@ class ProductController extends Controller
         }
 
         $product = Product::create($data);
-        return $product;
+        return response()->json($product, 201);
     }
 
-    public function update(Request $request, Product $product)
+    public function atualizarProduto(Request $request, Product $product)
     {
         $data = $request->validate([
             'name' => 'sometimes|max:255',
@@ -52,10 +50,10 @@ class ProductController extends Controller
         }
 
         $product->update($data);
-        return $product;
+        return response()->json($product, 200);
     }
 
-    public function destroy (Product $product)
+    public function deletarProduto (Product $product)
     {
         $product->delete();
         return response()->noContent();

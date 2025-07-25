@@ -5,15 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class UsersCarts extends Model
+class Coupon extends Model
 {
     use HasFactory;
 
-    protected $table = 'users_carts';
+    protected $table = 'coupon';
 
     protected $fillable = [
         'id',
-        'created_at',
-        'user_id',
+        'coupon_code',
+        'startDate',
+        'endDate',
+        'discount',
     ];
 }
