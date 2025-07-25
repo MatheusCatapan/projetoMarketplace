@@ -13,17 +13,15 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required|same:password',
         ]);
 
         $user = User::create($fields);
 
         $token = $user->createToken($request->name);
 
-        return response()->json([
-            'user' => $user,
-            'token' => $token->plainTextToken,
-        ], 201);
+        return response()->json($user, 201);
     }
 
     public function loginUsuario(Request $request)
@@ -37,7 +35,7 @@ class AuthController extends Controller
 
         if(!$user || !Hash::check($request->password, $user->password)) {
             return [
-                'message' => "Senha incorreta"
+                'message' => "Dados inválidos!"
             ];
         }
 

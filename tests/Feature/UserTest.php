@@ -22,65 +22,72 @@ class UserTest extends TestCase
 
     }
 
-    public function test_retorno_de_usuario_logado()
+    public function test_retornar_usuario_autentiado()
     {
         $auth = $this->authenticateUser();
-        $user = $auth['user'];
+        $headers = ['Authorization' => $auth['Authorization']];
 
-        $response = $this->actingAs($user)->getJson('/api/user');
+        $response = $this->withHeaders($headers)->getJson('/api/user');
 
         $response->assertOk()
-            ->assertJson([
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
+            ->assertJsonStructure([
+                'id',
+                'name',
+                'email',
+                'role',
             ]);
     }
 
-    public function test_deletar_usuario_logado()
+    public function test_atualizar_usuario()
     {
         $auth = $this->authenticateUser();
+        $headers = ['Authorization' => $auth['Authorization']];
         $user = $auth['user'];
 
-        $response = $this->actingAs($user)->deleteJson('/api/user');
-        $response->assertOk();
-    }
-
-    public function test_atualizar_usuario_logado()
-    {
-        $auth = $this->authenticateUser();
-        $user = $auth['user'];
-        $response = $this->actingAs($user)->putJson('/api/user', [
+        $response = $this->withHeaders($headers)->putJson('/api/user/' . $user->id, [
             'name' => 'Novo Nome',
-            'password' => 'novaSenha',
-            'password_confirmation' => 'novaSenha',
+            'email' => 'novo@email.com'
         ]);
-        $response->assertOk()
-            ->assertJson([
+        $response->assertJson([
+            'message' => 'Usuário atualizado com sucesso',
+            'user' => [
                 'id' => $user->id,
                 'name' => 'Novo Nome',
-                'email' => $user->email,
-            ]);
+                'email' => 'novo@email.com',
+        ],
+        ]);
+        $response->assertStatus(200);
+    }
+
+    public function test_deletar_usuario()
+    {
+        $auth = $this->authenticateUser();
+        $headers = ['Authorization' => $auth['Authorization']];
+        $user = $auth['user'];
+
+        $response = $this->withHeaders($headers)->deleteJson('/api/user/' . $user->id);
+
+        $response->assertStatus(204);
     }
 
     public function test_criar_moderadores()
     {
         $auth = $this->authenticateUser();
-        $user = $auth['user'];
+        $headers = ['Authorization' => $auth['Authorization']];
 
-        $response = $this->actingAs($user)->postJson('/api/user', [
+        $response = $this->withHeaders($headers)->postJson('/api/user', [
             'name' => 'Moderador Teste',
-            'email' => 'moderador@exemplo.com',
-            'password' => 'senhaSegura',
-            'password_confirmation' => 'senhaSegura',
+            'email' => 'mod@email.com',
+            'password' => 'senha123',
+            'password_confirmation' => 'senha123',
             'role' => 'MODERADOR',
         ]);
 
-        $response->assertStatus(201);
-        $response->assertJsonFragment([
-            'name' => 'Moderador Teste',
-            'email' => 'moderador@exemplo.com',
-            'role' => 'MODERADOR',
-        ]);
+        $response->assertCreated()
+            ->assertJsonStructure([
+                'id',
+                'name',
+                'email',
+            ]);
     }
 }

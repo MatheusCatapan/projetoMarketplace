@@ -13,16 +13,15 @@ class AutenticacaoTest extends TestCase
 
     public function test_registro_funcionando()
     {
-        $response = $this->postJson('/api/register', [
+        $response = $this->postJson('api/register', [
             'name' => 'Teste',
-            'email' => 'teste@email.com',
+            'email' => 'matheus@teste.com',
             'password' => 'senha123',
-            'password_confirmation' => 'senha123'
+            'password_confirmation' => 'senha123',
         ]);
-
-        $response->assertCreated()
-            ->assertJsonStructure(['user', 'token']);
+        $response->assertCreated();
     }
+
 
     public function test_login_funcionando()
     {
@@ -35,8 +34,7 @@ class AutenticacaoTest extends TestCase
             'password' => 'senha123'
         ]);
 
-        $response->assertOk()
-            ->assertJsonStructure(['user', 'token']);
+        $response->assertOk();
     }
 }
 

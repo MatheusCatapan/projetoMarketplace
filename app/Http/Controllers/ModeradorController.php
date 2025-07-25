@@ -27,7 +27,7 @@ class ModeradorController extends Controller
         $fields['password'] = Hash::make($fields['password']);
 
         $user = User::create($fields);
-        return $user;
+        return response()->json($user, 201);
     }
 
     public function listarModeradores()

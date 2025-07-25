@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
-class CategoriesController
+class CategoryController
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->middleware('auth:sanctum', 'admin')->except(['listarCategorias', 'mostrarCategoria']);
     }
-
+//Admins
     public function cadastrarCategoria(Request $request)
     {
         $data = $request->validate([
@@ -22,7 +22,12 @@ class CategoriesController
         $category = Category::create($data);
         return response()->json($category, 201);
     }
-
+//Admins
+    public function deletarCategoria (Category $category)
+    {
+        $category->delete();
+        return response()->noContent();
+    }
 
     public function listarCategorias()
     {
@@ -34,9 +39,5 @@ class CategoriesController
         return $category;
     }
 
-    public function deletarCategoria (Category $category)
-    {
-        $category->delete();
-        return response()->noContent();
-    }
+
 }

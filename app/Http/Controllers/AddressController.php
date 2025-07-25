@@ -12,7 +12,9 @@ class AddressController extends Controller
         $this->middleware('auth:sanctum');
     }
 
-    public function index(Request $request)
+
+//Retorna todos os endereços do usuário autenticado
+    public function verEnderecos(Request $request)
     {
         return $request->user()->addresses;
     }
@@ -30,6 +32,7 @@ class AddressController extends Controller
         return $address;
     }
 
+//Mostra um endereço específico do usuário autenticado
     public function mostrarEndereco(Address $address)
     {
         $this->authorize('view', $address);

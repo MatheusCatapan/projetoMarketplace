@@ -7,35 +7,10 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function atualizarUsuario(Request $request)
+
+    public function __construct()
     {
-        $user = $request->user();
-
-        $data = $request->validate([
-            'name' => 'sometimes|max:255,' . $user->id,
-            'email' => 'sometimes|email|unique',
-            'password' => 'sometimes|confirmed'
-        ]);
-
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        }
-
-        $user->update($data);
-        return $user;
-    }
-
-    public function mostrarUsuario(Request $request)
-    {
-        return $request->user();
-    }
-
-    public function deletarUsuario(Request $request)
-    {
-        $user = $request->user();
-        $user->delete();
-
-        return response()->json(["Seu usuário foi deletado"]);
+        $this->middleware('auth:sanctum')->only(['atualizarUsuario', 'mostrarUsuario', 'deletarUsuario']);
     }
 
     public function cadastrarUsuario(Request $request)
@@ -60,4 +35,40 @@ class UserController extends Controller
             'email' => $user->email,
         ], 201);
     }
+
+    public function atualizarUsuario(Request $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'name' => 'sometimes|max:255,' . $user->id,
+            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'password' => 'sometimes|confirmed'
+        ]);
+
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        $user->update($data);
+        return response()->json([
+            'message' => 'Usuário atualizado com sucesso',
+            'user' => $user,
+        ], 200);
+    }
+
+    public function mostrarUsuario(Request $request)
+    {
+        return $request->user();
+    }
+
+    public function deletarUsuario(Request $request)
+    {
+        $user = $request->user();
+        $user->delete();
+
+        return response()->json(["Seu usuário foi deletado"], 204);
+    }
+
+
 }
