@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Address;
+use App\Models\Cart;
+
 
 class User extends Authenticatable
 {
@@ -31,9 +34,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function addresses()
+    public function endereco()
     {
         return $this->hasMany(Address::class);
+    }
+
+    public function carrinho()
+    {
+        return $this->hasOne(Cart::class);
     }
 }
 

@@ -69,6 +69,4 @@ class UserController extends Controller
 
         return response()->json(["Seu usuário foi deletado"], 204);
     }
-
-
 }
