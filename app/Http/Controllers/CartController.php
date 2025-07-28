@@ -46,7 +46,7 @@ class CartController extends Controller
             $cart->products()->attach($request->product_id, ['quantity' => $request->quantity]);
         }
         $sucesso = "Sucesso";
-        return response()->json($sucesso, 200);
+        return response()->json(['message' => 'Produto adicionado ao carrinho com sucesso'], 200);
     }
 
     public function removerProduto(Request $request, $productId)

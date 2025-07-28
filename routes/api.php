@@ -26,9 +26,9 @@ Route::apiResource('addresses', AddressController::class);
 Route::apiResource('product', ProductController::class)->only(['index', 'show']);
 
 //Rotas de carrinho
-Route::middleware('auth:sanctum')->get('/cart', [CartController::class, 'criarCarrinhodeUsuario']);
-Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'adicionarProduto']);
-Route::middleware('auth:sanctum')->delete('/cart/remove/{productId}', [CartController::class, 'removerProduto']);
+Route::middleware('auth:sanctum')->get('/carrinho', [CartController::class, 'criarCarrinhodeUsuario']);
+Route::middleware('auth:sanctum')->post('/carrinho/adicionar', [CartController::class, 'adicionarProduto']);
+Route::middleware('auth:sanctum')->delete('/carrinho/remover/{productId}', [CartController::class, 'removerProduto']);
 
 //Rotas de admin
 Route::middleware('auth:sanctum', 'admin')->put('/user/{id}', [UserController::class, 'atualizarUsuario']);

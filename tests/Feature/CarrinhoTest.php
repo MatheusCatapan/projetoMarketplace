@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Product;
+
 
 //Um carrinho por usuario, adicionar produtos, remover produtos, finalizar compra, limpar carrinho.
 
@@ -26,8 +28,12 @@ class CarrinhoTest extends TestCase
     {
         $auth = $this->authenticateUser();
         $user = $auth['user'];
+        $product = Product::factory()->create([
+            'id' => '1',
+            'stock' => '10'
+        ]);
 
-        $response = $this->actingAs($user)->postJson('/cart/add', [
+        $response = $this->actingAs($user)->postJson('/carrinho/adicionar', [
             'product_id' => 1,
             'quantity' => 2,
         ]);
