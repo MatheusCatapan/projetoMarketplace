@@ -25,6 +25,26 @@ class ProductsTest extends TestCase
         return ['Authorization' => 'Bearer ' . $token, 'user' => $user];
     }
 
+    public function test_mostrar_produto()
+    {
+        //Autenticar usuário
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
+        //Criar a categoria do produto
+        $category = Category::factory()->create();
+        //Criar o produto
+        $product = Product::factory()->create([
+            'category_id' => $category->id,
+            'name' => 'Produto Teste',
+            'stock' => 10,
+            'price' => 99.99,
+        ]);
+        //Mostrar o produto
+        $response = $this->actingAs($user)->getJson('/api/product/' . $product->id);
+        //AssertStatus de 200 para verificar se o produto foi mostrado com sucesso
+        $response->assertStatus(200);
+    }
+
     public function test_criar_produto()
     {
         //Autenticar usuário
@@ -78,7 +98,6 @@ class ProductsTest extends TestCase
         $category = Category::factory()->create();
         //Criar o produto
         $product = Product::factory()->create([
-            'id' => 1,
             'category_id' => $category->id,
             'name' => 'Produto Teste',
             'stock' => 10,

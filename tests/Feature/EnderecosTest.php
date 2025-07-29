@@ -1,34 +1,45 @@
 <?php
 
-// namespace Tests\Feature;
+namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-// use Tests\TestCase;
-// use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+use App\Models\User;
 
-// class EnderecosTest extends TestCase
-// {
-//     use RefreshDatabase;
+class EnderecosTest extends TestCase
+{
+    use RefreshDatabase;
 
-//     public function test_controle_de_enderecos()
-//     {
-//         $user = User::factory()->create();
-//         $this->actingAs($user, 'sanctum');
+    public function authenticateUser()
+    {
+        $user = User::factory()->create([
+            'role' => 'USER',
+        ]);
 
-//         $response = $this->postJson('/api/addresses', [
-//             'street' => 'Rua Exemplo',
-//             'city' => 'Cidade Exemplo',
-//             'state' => 'Estado Exemplo',
-//             'zip' => '12345-678'
-//         ]);
-//         $response->assertStatus(201)
-//             ->assertJsonStructure([
-//                 'street',
-//                 'city',
-//                 'state',
-//                 'zip',
-//             ]);
-//     }
+        $token = $user->createToken('TestToken')->plainTextToken;
 
+        return ['Authorization' => 'Bearer ' . $token, 'user' => $user];
+    }
 
-// }
+    public function test_mostrar_endereco()
+    {
+        // Autenticar usuário
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
+
+        // Criar o endereço
+        $address = Address::factory()->create([
+            'user_id' => $user->id,
+            'street' => 'Rua Teste',
+            'city' => 'Cidade Teste',
+            'state' => 'Estado Teste',
+            'zip' => '12345-678',
+        ]);
+
+        // Mostrar o endereço
+        $response = $this->actingAs($user)->getJson('/api/address/' . $address->id);
+
+        // AssertStatus de 200 para verificar se o endereço foi mostrado com sucesso
+        $response->assertStatus(200);
+    }
+}
