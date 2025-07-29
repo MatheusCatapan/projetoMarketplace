@@ -9,14 +9,27 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $table = 'product';
+    protected $table = 'products';
 
     protected $fillable = [
-        'id',
         'category_id',
         'name',
+        'description',
         'stock',
         'price',
         'image'
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function cart()
+    {
+        return $this->belongsToMany(Cart::class, 'cart_products')
+            ->withPivot('quantity')
+            ->withTimestamps();
+    }
+
 }

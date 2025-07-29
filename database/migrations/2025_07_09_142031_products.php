@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('categories_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('stock')->nullable();
-            $table->decimal('valor', 10, 2);
+            $table->decimal('price', 10, 2);
             $table->string('image')->nullable();
             $table->timestamps();
         });

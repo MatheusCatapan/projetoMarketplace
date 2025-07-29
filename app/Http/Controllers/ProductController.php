@@ -20,9 +20,9 @@ class ProductController extends Controller
     public function cadastrarProduto (Request $request)
     {
         $data = $request->validate([
-            'id' => 'integer',
             'category_id' => 'required|integer',
             'name' => 'required|max:255',
+            'description' => 'nullable|max:255',
             'stock' => 'required|integer',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'

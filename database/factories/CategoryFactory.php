@@ -15,7 +15,6 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => $this->faker->unique()->randomNumber(),
             'name' => $this->faker->word(),
             'description' => $this->faker->sentence(),
             'created_at' => now(),

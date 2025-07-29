@@ -20,4 +20,9 @@ class Address extends Model
         'zip',
         'timestamp'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

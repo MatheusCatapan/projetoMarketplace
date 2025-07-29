@@ -36,9 +36,9 @@ Route::middleware('auth:sanctum', 'admin')->delete('/user/{id}', [UserController
 Route::middleware('auth:sanctum', 'admin')->post('/user', [UserController::class, 'cadastrarUsuario']);
 
 //Rotas dos produtos - Moderadores
-Route::middleware('auth:sanctum', 'moderador')->post('/product', [ProductController::class, 'store']);
-Route::middleware('auth:sanctum', 'moderador')->put('/product/{product}', [ProductController::class, 'update']);
-Route::middleware('auth:sanctum', 'moderador')->delete('/product/{product}', [ProductController::class, 'destroy']);
+Route::middleware('auth:sanctum', 'moderador')->post('/product', [ProductController::class, 'cadastrarProduto']);
+Route::middleware('auth:sanctum', 'moderador')->put('/product/{product}', [ProductController::class, 'atualizarProduto']);
+Route::middleware('auth:sanctum', 'moderador')->delete('/product/{product}', [ProductController::class, 'deletarProduto']);
 
 
 
