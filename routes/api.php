@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 
+
 //Login, logout
 Route::post('/register', [AuthController::class, 'registrarUsuario']);
 Route::post('/login', [AuthController::class, 'loginUsuario']);
@@ -22,8 +23,14 @@ Route::get('/user', function (Request $request) {
 //Rotas normais
 Route::apiResource('posts', PostController::class);
 Route::apiResource('categories', CategoryController::class);
-Route::apiResource('addresses', AddressController::class);
-Route::apiResource('product', ProductController::class)->only(['index', 'show']);
+
+
+//Rotas de endereços
+Route::middleware('auth:sanctum')->get('/address', [AddressController::class, 'verEnderecos']);
+Route::middleware('auth:sanctum')->post('/address', [AddressController::class, 'armazenarEndereco']);
+Route::middleware('auth:sanctum')->put('/address/{address}', [AddressController::class, 'atualizarEndereco']);
+Route::middleware('auth:sanctum')->delete('/address/{address}', [AddressController::class, 'deletarEndereco']);
+
 
 //Rotas de carrinho
 Route::middleware('auth:sanctum')->get('/carrinho', [CartController::class, 'criarCarrinhodeUsuario']);

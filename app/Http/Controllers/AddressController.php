@@ -19,7 +19,6 @@ class AddressController extends Controller
         return $request->user()->addresses;
     }
 
-
     public function armazenarEndereco(Request $request)
     {
         $data = $request->validate([
@@ -29,13 +28,6 @@ class AddressController extends Controller
             'zip' => 'required'
         ]);
         $address = $request->user()->addresses()->create($data);
-        return $address;
-    }
-
-//Mostra um endereço específico do usuário autenticado
-    public function mostrarEndereco(Address $address)
-    {
-        $this->authorize('view', $address);
         return $address;
     }
 
