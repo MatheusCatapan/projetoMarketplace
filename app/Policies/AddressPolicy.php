@@ -10,9 +10,6 @@ class AddressPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can update the address.
-     */
     public function update(User $user, Address $address): bool
     {
         return $user->id === $address->user_id;
