@@ -38,6 +38,9 @@ class UserController extends Controller
 
     public function atualizarUsuario(Request $request)
     {
+
+        $this->authorize('atualizar', $request->user());
+
         $user = $request->user();
 
         $data = $request->validate([
@@ -64,6 +67,9 @@ class UserController extends Controller
 
     public function deletarUsuario(Request $request)
     {
+
+        $this->authorize('deletar', $request->user());
+
         $user = $request->user();
         $user->delete();
 

@@ -14,16 +14,15 @@ use App\Http\Controllers\CartController;
 //Login, logout
 Route::post('/register', [AuthController::class, 'registrarUsuario']);
 Route::post('/login', [AuthController::class, 'loginUsuario']);
-Route::post('/logout', [AuthController::class, 'logoutUsuario'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logoutUsuario']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 //Rotas normais
-Route::apiResource('posts', PostController::class);
-Route::apiResource('categories', CategoryController::class);
-
+// Route::apiResource('posts', PostController::class);
+// Route::apiResource('categories', CategoryController::class);
 
 //Rotas de endereços
 Route::middleware('auth:sanctum')->get('/address', [AddressController::class, 'verEnderecos']);
