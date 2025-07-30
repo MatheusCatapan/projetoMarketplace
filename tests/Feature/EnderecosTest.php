@@ -90,10 +90,31 @@ class EnderecosTest extends TestCase
         ];
 
         // Atualizar o endereço
-        $response = $this->actingAs($user)->putJson('/api/address/' . $user->id);
+        $response = $this->actingAs($user)->putJson('/api/address/' . $address->id, $data);
 
         // AssertStatus de 200 para verificar se o endereço foi atualizado com sucesso
         $response->assertStatus(200);
     }
 
+    public function test_deletar_endereco()
+    {
+        // Autenticar usuário
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
+
+        // Criar o endereço
+        $address = Address::factory()->create([
+            'user_id' => $user->id,
+            'street' => 'Rua Teste',
+            'city' => 'Cidade Teste',
+            'state' => 'Estado Teste',
+            'zip' => '12345-678',
+        ]);
+
+        // Deletar o endereço
+        $response = $this->actingAs($user)->deleteJson('/api/address/' . $address->id);
+
+        // AssertStatus de 204 para verificar se o endereço foi deletado com sucesso
+        $response->assertStatus(204);
+    }
 }

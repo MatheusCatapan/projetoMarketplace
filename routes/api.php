@@ -31,6 +31,11 @@ Route::middleware('auth:sanctum')->post('/address', [AddressController::class, '
 Route::middleware('auth:sanctum')->put('/address/{address}', [AddressController::class, 'atualizarEndereco']);
 Route::middleware('auth:sanctum')->delete('/address/{address}', [AddressController::class, 'deletarEndereco']);
 
+//Rotas de categorias (admin)
+Route::middleware('auth:sanctum', 'admin')->post('/categories', [CategoryController::class, 'cadastrarCategoria']);
+Route::middleware('auth:sanctum', 'admin')->put('/categories/{category}', [CategoryController::class, 'atualizarCategoria']);
+Route::middleware('auth:sanctum', 'admin')->delete('/categories/{category}', [CategoryController::class, 'deletarCategoria']);
+Route::middleware('auth:sanctum')->get('/categories', [CategoryController::class, 'mostrarCategoria']);
 
 //Rotas de carrinho
 Route::middleware('auth:sanctum')->get('/carrinho', [CartController::class, 'criarCarrinhodeUsuario']);
