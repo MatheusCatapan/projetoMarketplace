@@ -12,7 +12,6 @@ class UserCart extends Model
     protected $table = 'user_cart';
 
     protected $fillable = [
-        'id',
         'created_at',
         'user_id',
     ];

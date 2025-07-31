@@ -12,7 +12,6 @@ class UsersAddresses extends Model
     protected $table = 'user_address';
 
     protected $fillable = [
-        'id',
         'street',
         'number',
         'zip',

@@ -12,7 +12,6 @@ class UserOrder extends Model
     protected $table = 'user_order';
 
     protected $fillable = [
-        'id',
         'user_id',
         'addressId',
         'orderDate',
