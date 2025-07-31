@@ -64,10 +64,7 @@ class CouponsTest extends TestCase
         $user = $auth['user'];
 
         //Criar cupom
-        $cupom = Coupon::factory()->create([
-            'coupon_code' => 'DESCONTO10',
-        ]);
-
+        $cupom = Coupon::factory()->create();
 
         //Deletar cupom
         $response = $this->actingAs($user)->deleteJson('/api/coupons/' . $cupom->coupon_code);
