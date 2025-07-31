@@ -45,13 +45,14 @@ class CouponsController extends Controller
         ]);
     }
 
-    public function deletarCupom($cupom)
-    {
-        $cupom = Coupon::findOrFail($cupom);
+    public function deletarCupom($coupon_code)
+{
+
+        $cupom = Coupon::where('coupon_code', $coupon_code)->firstOrFail();
         $cupom->delete();
 
         return response()->json([
             'message' => 'Cupom deletado com sucesso'
-        ]);
-    }
+    ], 200);
+}
 }

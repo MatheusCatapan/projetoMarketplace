@@ -56,7 +56,7 @@ Route::middleware(['auth:sanctum', 'moderador'])->delete('/product/{product}', [
 //Rotas de cupons - Admin
 Route::middleware(['auth:sanctum', 'admin'])->post('/coupons', [CouponsController::class, 'criarCupom']);
 Route::middleware(['auth:sanctum', 'admin'])->get('/coupons', [CouponsController::class, 'listarCupons']);
-
+Route::middleware(['auth:sanctum', 'admin'])->delete('/coupons/{code}', [CouponsController::class, 'deletarCupom']);
 
 
 
