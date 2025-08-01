@@ -10,9 +10,8 @@ return new class extends Migration
     {
         Schema::create('users_carts', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('created_at')->useCurrent();
-
             $table->foreignId('user_id',)->constrained('users')->onDelete('cascade');
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 

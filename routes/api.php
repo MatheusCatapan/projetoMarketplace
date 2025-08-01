@@ -37,11 +37,6 @@ Route::middleware(['auth:sanctum', 'admin'])->put('/categories/{category}', [Cat
 Route::middleware(['auth:sanctum', 'admin'])->delete('/categories/{category}', [CategoryController::class, 'deletarCategoria']);
 Route::middleware('auth:sanctum')->get('/categories', [CategoryController::class, 'mostrarCategoria']);
 
-//Rotas de carrinho
-Route::middleware('auth:sanctum')->get('/carrinho', [CartController::class, 'criarCarrinhodeUsuario']);
-Route::middleware('auth:sanctum')->post('/carrinho/adicionar', [CartController::class, 'adicionarProduto']);
-Route::middleware('auth:sanctum')->delete('/carrinho/remover/{productId}', [CartController::class, 'removerProduto']);
-
 //Rotas de admin
 Route::middleware(['auth:sanctum', 'admin'])->put('/user/{id}', [UserController::class, 'atualizarUsuario']);
 Route::middleware(['auth:sanctum', 'admin'])->delete('/user/{id}', [UserController::class, 'deletarUsuario']);
@@ -57,6 +52,11 @@ Route::middleware(['auth:sanctum', 'moderador'])->delete('/product/{product}', [
 Route::middleware(['auth:sanctum', 'admin'])->post('/coupons', [CouponsController::class, 'criarCupom']);
 Route::middleware(['auth:sanctum', 'admin'])->get('/coupons', [CouponsController::class, 'listarCupons']);
 Route::middleware(['auth:sanctum', 'admin'])->delete('/coupons/{code}', [CouponsController::class, 'deletarCupom']);
+
+//Rotas do carrinho
+Route::middleware('auth:sanctum')->get('/carrinho', [CartController::class, 'mostrarCarrinho']);
+Route::middleware('auth:sanctum')->post('/carrinho/adicionar', [CartController::class, 'adicionarProduto']);
+Route::middleware('auth:sanctum')->delete('/carrinho/remover', [CartController::class, 'removerProduto']);
 
 
 

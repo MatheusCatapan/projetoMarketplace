@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
+    use HasFactory;
+
+    protected $table = 'users_carts';
+
+    protected $fillable = [
+        'user_id',
+        'created_at',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -16,10 +25,6 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
-    public function products()
-{
-    return $this->belongsToMany(Product::class)->withPivot('quantity')->withTimestamps();
-}
 }
 
 

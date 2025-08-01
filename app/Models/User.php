@@ -39,7 +39,7 @@ class User extends Authenticatable
         return $this->hasMany(Address::class, 'user_id');
     }
 
-    public function carrinho()
+    public function cart()
     {
         return $this->hasOne(Cart::class);
     }

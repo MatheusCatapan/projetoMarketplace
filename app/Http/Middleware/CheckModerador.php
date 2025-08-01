@@ -17,7 +17,7 @@ class CheckModerador
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user() || $request->user()->role !== 'MODERADOR') {
+        if (!$request->user() || $request->user()->role !== 'MODERADOR' || $request->user()->role !== 'ADMIN') {
             return response()->json(['error' => 'Acesso negado'], 403);
         }
 

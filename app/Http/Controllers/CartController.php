@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum']);
+    }
+
     public function adicionarProduto(Request $request)
     {
         //Usuário deve estar logado
@@ -13,6 +19,7 @@ class CartController extends Controller
         if (!$user) {
             return response()->json(['message' => 'Usuário não autenticado'], 401);
         }
+
         //Atribuição de carrinho para o usuário
         else
         {
@@ -33,6 +40,10 @@ class CartController extends Controller
         else
         {
             $item = new CartItem();
+            $item->cart_id = $cart->id;
+            $item->product_id = $request->input('product_id');
+            $item->quantity = $request->input('quantity');
+            $item->save();
         }
         return response()->json(['message' => 'Produto adicionado ao carrinho com sucesso'], 200);
     }
