@@ -57,7 +57,7 @@ Route::middleware(['auth:sanctum', 'admin'])->delete('/coupons/{code}', [Coupons
 Route::middleware('auth:sanctum')->get('/carrinho', [CartController::class, 'mostrarCarrinho']);
 Route::middleware('auth:sanctum')->post('/carrinho/adicionar', [CartController::class, 'adicionarProduto']);
 Route::middleware('auth:sanctum')->delete('/carrinho/remover', [CartController::class, 'removerProduto']);
-
+Route::middleware('auth:sanctum')->delete('/carrinho/limpar', [CartController::class, 'limparCarrinho']);
 
 
 
