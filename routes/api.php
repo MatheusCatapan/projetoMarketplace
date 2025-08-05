@@ -59,6 +59,8 @@ Route::middleware('auth:sanctum')->post('/carrinho/adicionar', [CartController::
 Route::middleware('auth:sanctum')->delete('/carrinho/remover', [CartController::class, 'removerProduto']);
 Route::middleware('auth:sanctum')->delete('/carrinho/limpar', [CartController::class, 'limparCarrinho']);
 
+//Rotas de orders
+Route::middleware('auth:sanctum')->post('/pedido/criar', [OrderController::class, 'criarPedido']);
 
 
 
