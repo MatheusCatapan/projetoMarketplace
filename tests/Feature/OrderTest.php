@@ -28,7 +28,7 @@ class OrderTest extends TestCase
     {
         //autentica o usuario pois só é possível criar um pedido autenticado
         $auth = $this->authenticateUser();
-        $user = auth['user'];
+        $user = $auth['user'];
 
         $address = Address::factory()->create([
             'user_id' =>$user->id
@@ -37,13 +37,17 @@ class OrderTest extends TestCase
             'price' => 199.00
         ]);
         $cart = Cart::factory()->create([
+            'user_id' => $user->id
+        ]);
+
+        $cartItem = CartItem::create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'quantity' => 3
+            'quantity' => 2
         ]);
 
         //Envia as requisições do que o OrderController quer
-        $response = $this->actingAs($user)->postJson('/pedido/criar', [
+        $response = $this->actingAs($user)->postJson('/api/pedido/criar', [
             'address_id' => $address->id
         ]);
 

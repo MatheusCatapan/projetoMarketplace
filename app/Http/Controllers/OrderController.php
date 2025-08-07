@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -24,6 +26,10 @@ class OrderController extends Controller
         if (!$user->cart || $user->cart->items->isEmpty()) {
             return response()->json(['message' => 'Carrinho vazio'], 400);
         }
+        //Valida o endereço
+        $request->validate([
+            'address_id' => 'required|exists:users_addresses,id'
+        ]);
 
         $order = new Order();
         $order->user_id = $user->id;
