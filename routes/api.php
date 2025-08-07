@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->get('/categories', [CategoryController::class
 //Rotas de admin
 Route::middleware(['auth:sanctum', 'admin'])->put('/user/{id}', [UserController::class, 'atualizarUsuario']);
 Route::middleware(['auth:sanctum', 'admin'])->delete('/user/{id}', [UserController::class, 'deletarUsuario']);
-Route::middleware(['auth:sanctum', 'admin'])->post('/user', [UserController::class, 'cadastrarUsuario']);
+Route::middleware(['auth:sanctum', 'admin'])->post('/user', [UserController::class, 'cadastrarUsuarioModerador']);
 
 //Rotas dos produtos - Moderadores
 Route::middleware('auth:sanctum')->get('/product/{product}', [ProductController::class, 'mostrarProduto']);

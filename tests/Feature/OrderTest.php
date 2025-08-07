@@ -57,4 +57,10 @@ class OrderTest extends TestCase
                     'order_id'
                 ]);
     }
+
+    public function test_cancelar_pedido()
+    {
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
+    }
 }

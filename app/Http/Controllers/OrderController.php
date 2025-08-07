@@ -57,4 +57,31 @@ class OrderController extends Controller
         return response()->json(['message' => 'Pedido criado com sucesso', 'order_id' => $order->id], 201);
     }
 
+        public function cancelarPedido($id)
+    {
+        // Usuário autenticado
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['erro' => 'Usuário não autenticado'], 401);
+        }
+
+        // Busca o pedido e garante que ele pertence ao usuário
+        $order = Order::where('id', $id)->where('user_id', $user->id)->first();
+
+        if (!$order) {
+            return response()->json(['erro' => 'Pedido não encontrado'], 404);
+        }
+
+        // Verifica se o pedido já foi processado ou cancelado
+        if ($order->status !== Order::STATUS_PENDING) {
+            return response()->json(['erro' => 'Não é possível cancelar um pedido já processado ou cancelado'], 400);
+        }
+
+        // Atualiza o status do pedido para cancelado
+        $order->status = Order::STATUS_CANCELED;
+        $order->save();
+
+        return response()->json(['mensagem' => 'Pedido cancelado com sucesso'], 200);
+    }
+
 }
