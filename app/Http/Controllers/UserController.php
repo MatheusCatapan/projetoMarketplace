@@ -13,7 +13,7 @@ class UserController extends Controller
         $this->middleware('auth:sanctum')->only(['atualizarUsuario', 'mostrarUsuario', 'deletarUsuario']);
     }
 
-    public function cadastrarUsuario(Request $request)
+    public function cadastrarUsuarioModerador(Request $request)
     {
         $fields = $request->validate([
             'name' => 'required|max:255',
@@ -22,9 +22,17 @@ class UserController extends Controller
             'role' => 'in:CLIENT,MODERADOR,ADMIN'
         ]);
 
-        if (!isset($fields['role'])) {
-            $fields['role'] = 'CLIENT';
+        $role = $fields['role'] ?? 'CLIENT';
+
+        if (in_array($role, ['MODERADOR', 'ADMIN'])) {
+        $user = auth()->user();
+
+        if (!$user || $user->role !== 'ADMIN') {
+            return response()->json([
+                'message' => 'Apenas administradores podem cadastrar moderadores.'
+            ], 403);
         }
+    }
 
         $fields['password'] = bcrypt($fields['password']);
         $user = User::create($fields);

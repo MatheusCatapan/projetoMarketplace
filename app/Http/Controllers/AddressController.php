@@ -12,7 +12,6 @@ class AddressController extends Controller
         $this->middleware(['auth:sanctum']);
     }
 
-
 //Retorna todos os endereços do usuário autenticado
     public function verEnderecos(Request $request)
     {
