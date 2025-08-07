@@ -57,4 +57,34 @@ class OrderTest extends TestCase
                     'order_id'
                 ]);
     }
+
+    public function test_cancelar_pedido_criado()
+    {
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
+
+        $address = Address::factory()->create([
+                'user_id' => $user->id
+            ]);
+        $product = Product::factory()->create([
+                'price' => 199.00
+            ]);
+        $cart = Cart::factory()->create([
+                    'user_id' => $user->id
+                ]);
+        $cartItem = CartItem::create([
+                'cart_id' => $cart->id,
+                'product_id' => $product->id,
+                'quantity' => 2
+            ]);
+        $response = $this->actingAs($user)->postJson('/api/pedido/criar', [
+            'address_id' => $address->id
+        ]);
+        $orderId = $response->json('order_id');
+        $response = $this->actingAs($user)->putJson('/api/pedido/cancelar/' . $orderId);
+        $response->assertStatus(200)
+                ->assertJson([
+                    'message' => 'Pedido cancelado com sucesso'
+                ]);
+    }
 }

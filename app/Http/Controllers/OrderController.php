@@ -57,4 +57,28 @@ class OrderController extends Controller
         return response()->json(['message' => 'Pedido criado com sucesso', 'order_id' => $order->id], 201);
     }
 
+    public function cancelarPedido($id)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['erro' => 'Usuário não autenticado'], 401);
+        }
+
+        $order = Order::find($id);
+
+        if (!$order || $order->user_id !== $user->id) {
+            return response()->json(['erro' => 'Pedido não encontrado ou não pertence ao usuário'], 404);
+        }
+
+        if ($order->status !== Order::STATUS_PENDING) {
+            return response()->json(['erro' => 'Pedido não pode ser cancelado'], 400);
+        }
+
+        $order->status = Order::STATUS_CANCELLED;
+        $order->save();
+
+        return response()->json(['message' => 'Pedido cancelado com sucesso'], 200);
+    }
+    
 }
