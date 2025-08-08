@@ -48,7 +48,8 @@ class OrderTest extends TestCase
 
         //Envia as requisições do que o OrderController quer
         $response = $this->actingAs($user)->postJson('/api/pedido/criar', [
-            'address_id' => $address->id
+            'address_id' => $address->id,
+            'coupon' => 'TESTCOUPON'
         ]);
 
         $response->assertStatus(201)
@@ -86,5 +87,43 @@ class OrderTest extends TestCase
                 ->assertJson([
                     'message' => 'Pedido cancelado com sucesso'
                 ]);
+    }
+
+    public function test_atualizar_status_pedido()
+    {
+        $auth = $this->authenticateUser();
+        $user = $auth['user'];
+
+        // Cria um moderador
+        $moderator = User::factory()->create(['role' => 'MODERADOR']);
+
+        $address = Address::factory()->create([
+            'user_id' => $user->id
+        ]);
+        $product = Product::factory()->create([
+            'price' => 199.00
+        ]);
+        $cart = Cart::factory()->create([
+            'user_id' => $user->id
+        ]);
+        CartItem::create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'quantity' => 2
+        ]);
+
+        // Cria o pedido
+        $response = $this->actingAs($user)->postJson('/api/pedido/criar', [
+            'address_id' => $address->id
+        ]);
+        $orderId = $response->json('order_id');
+
+        // Atualiza o status do pedido como moderador
+        $response = $this->actingAs($moderator)->putJson('/api/pedido/atualizar-status/' . $orderId, [
+            'status' => 'COMPLETED'
+        ]);
+
+        $response->assertStatus(200)
+                ->assertJson(['message' => 'Status do pedido atualizado com sucesso']);
     }
 }

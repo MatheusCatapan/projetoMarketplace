@@ -16,6 +16,7 @@ return new class extends Migration
             $table->dateTime('order_date');
             $table->enum('status', ['PENDING', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'])->default('PENDING');
             $table->foreignId('couponId')->nullable()->constrained('coupons')->onDelete('cascade');
+            $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('total_price', 10, 2);
             $table->timestamps();
         });

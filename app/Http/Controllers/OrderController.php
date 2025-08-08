@@ -28,18 +28,35 @@ class OrderController extends Controller
         }
         //Valida o endereço
         $request->validate([
-            'address_id' => 'required|exists:users_addresses,id'
+            'address_id' => 'required|exists:users_addresses,id',
+            'coupon' => 'nullable|string'
         ]);
+
+        // Calcula o total do carrinho
+        $total = $user->cart->items->sum(function ($item) {
+            return $item->product->price * $item->quantity;
+        });
+
+        $discount = 0;
+        $couponId = null;
+
+        // Aplica desconto se cupom válido
+        if ($request->filled('coupon')) {
+            $coupon = \App\Models\Coupon::where('code', $request->coupon)->first();
+            if ($coupon && $coupon->is_active) {
+                $discount = $coupon->discount; // supondo que seja valor fixo
+                $couponId = $coupon->id;
+            }
+        }
 
         $order = new Order();
         $order->user_id = $user->id;
         $order->address_id = $request->address_id;
         $order->order_date = now();
         $order->status = Order::STATUS_PENDING;
-        //Calcula o preço total do pedido com base nos itens do carrinho
-        $order->total_price = $user->cart->items->sum(function ($item) {
-            return $item->product->price * $item->quantity;
-        });
+        $order->couponId = $couponId;
+        $order->discount = $discount;
+        $order->total_price = $total - $discount;
         $order->save();
 
         //Transfere os itens do carrinho para o pedido
@@ -81,4 +98,28 @@ class OrderController extends Controller
         return response()->json(['message' => 'Pedido cancelado com sucesso'], 200);
     }
     
+    public function atualizarStatusPedido(Request $request, $id)
+    {
+        $user = auth()->user();
+
+        if (!$user || $user->role !== 'MODERADOR') {
+            return response()->json(['message' => 'Apenas moderadores podem atualizar o status do pedido'], 403);
+        }
+
+        $newStatus = $request->input('status');
+        $order = Order::find($id);
+
+        if (!$order) {
+            return response()->json(['message' => 'Pedido não encontrado'], 404);
+        }
+
+        if (!in_array($newStatus, ['PENDING', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'])) {
+            return response()->json(['message' => 'Status inválido'], 400);
+        }
+
+        $order->status = $newStatus;
+        $order->save();
+
+        return response()->json(['message' => 'Status do pedido atualizado com sucesso'], 200);
+    }
 }

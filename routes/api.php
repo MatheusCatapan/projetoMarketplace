@@ -65,5 +65,5 @@ Route::middleware('auth:sanctum')->delete('/carrinho/limpar', [CartController::c
 //Rotas de orders
 Route::middleware('auth:sanctum')->post('/pedido/criar', [OrderController::class, 'criarPedido']);
 Route::middleware('auth:sanctum')->put('/pedido/cancelar/{id}', [OrderController::class, 'cancelarPedido']);
-
+Route::middleware('auth:sanctum')->put('/pedido/atualizar-status/{id}', [OrderController::class, 'atualizarStatusPedido']);
 
